@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { View, StyleSheet, FlatList, Text, ScrollView, StatusBar, Platform, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, FlatList, Text, ScrollView, StatusBar, Platform, ActivityIndicator, Image } from 'react-native';
 import { useBookingStore } from '../../store/useBookingStore';
 import { RoomCard } from '../../components/RoomCard';
 import { SearchBar } from '../../components/SearchBar';
@@ -31,8 +31,14 @@ export default function HomeScreen() {
       <StatusBar barStyle="dark-content" backgroundColor={colors.neutral.offWhite} />
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Discover Rooms</Text>
-          <Text style={styles.headerSubtitle}>Find the perfect space for your study session</Text>
+          <View style={styles.logoContainer}>
+            <Image 
+              source={{ uri: 'https://vku.udn.vn/wp-content/uploads/2020/05/logo-vku.png' }} 
+              style={styles.logo} 
+              resizeMode="contain" 
+            />
+            <Text style={styles.logoText}>VKU BOOKING ROOM</Text>
+          </View>
           
           <View style={styles.searchContainer}>
             <SearchBar value={searchQuery} onChangeText={setSearchQuery} />
@@ -122,6 +128,22 @@ const styles = StyleSheet.create({
     paddingTop: layout.spacing.md,
     paddingBottom: layout.spacing.sm,
     backgroundColor: colors.neutral.offWhite,
+  },
+  logoContainer: {
+    alignItems: 'flex-start',
+    marginBottom: layout.spacing.lg,
+  },
+  logo: {
+    width: 80,
+    height: 40,
+    marginBottom: 4,
+  },
+  logoText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: colors.primary.main,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   headerTitle: {
     ...typography.h1,
