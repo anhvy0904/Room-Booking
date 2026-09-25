@@ -1,0 +1,136 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  validate-and-web:
+    name: Validate, Test & Web Build
+    runs-on: ubuntu-latest
+    env:
+      EXPO_PUBLIC_FIREBASE_API_KEY: ${{ secrets.EXPO_PUBLIC_FIREBASE_API_KEY || 'AIzaSyCcReQMrAu8M1_08e_sUpB99yBUNuuz450' }}
+      EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN || 'vku-booking-room.firebaseapp.com' }}
+      EXPO_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.EXPO_PUBLIC_FIREBASE_PROJECT_ID || 'vku-booking-room' }}
+      EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET || 'vku-booking-room.firebasestorage.app' }}
+      EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '736332302026' }}
+      EXPO_PUBLIC_FIREBASE_APP_ID: ${{ secrets.EXPO_PUBLIC_FIREBASE_APP_ID || '1:736332302026:web:e3afa4df49160cc3319633' }}
+      EXPO_PUBLIC_FIREBASE_DATABASE_URL: ${{ secrets.EXPO_PUBLIC_FIREBASE_DATABASE_URL || 'https://vku-booking-room-default-rtdb.firebaseio.com' }}
+      EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID || '736332302026-o97ghic3da00c2qmel4durq2lheg76bp.apps.googleusercontent.com' }}
+      EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID || '736332302026-nnr55q7u9qc1bq1s6g0unq7e5j0sac7n.apps.googleusercontent.com' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript Strict Typecheck
+        run: npx tsc --noEmit
+
+      - name: Expo Lint
+        run: npx expo lint
+
+      - name: Run Regression Tests
+        run: node --test tests/booking-regressions.test.cjs
+
+      - name: Build Web Production Export
+        run: npx expo export -p web
+
+      - name: Upload Web Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-dist
+          path: dist/
+          retention-days: 14
+
+  build-apk:
+    name: Build Android Release APK
+    runs-on: ubuntu-latest
+    needs: [ validate-and-web ]
+    env:
+      EXPO_PUBLIC_FIREBASE_API_KEY: ${{ secrets.EXPO_PUBLIC_FIREBASE_API_KEY || 'AIzaSyCcReQMrAu8M1_08e_sUpB99yBUNuuz450' }}
+      EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN || 'vku-booking-room.firebaseapp.com' }}
+      EXPO_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.EXPO_PUBLIC_FIREBASE_PROJECT_ID || 'vku-booking-room' }}
+      EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET || 'vku-booking-room.firebasestorage.app' }}
+      EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '736332302026' }}
+      EXPO_PUBLIC_FIREBASE_APP_ID: ${{ secrets.EXPO_PUBLIC_FIREBASE_APP_ID || '1:736332302026:web:e3afa4df49160cc3319633' }}
+      EXPO_PUBLIC_FIREBASE_DATABASE_URL: ${{ secrets.EXPO_PUBLIC_FIREBASE_DATABASE_URL || 'https://vku-booking-room-default-rtdb.firebaseio.com' }}
+      EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID || '736332302026-o97ghic3da00c2qmel4durq2lheg76bp.apps.googleusercontent.com' }}
+      EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID || '736332302026-nnr55q7u9qc1bq1s6g0unq7e5j0sac7n.apps.googleusercontent.com' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Setup Java JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '21'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prebuild Android native code
+        run: npx expo prebuild --platform android --no-install
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x android/gradlew
+
+      - name: Build Android Release APK
+        working-directory: android
+        run: ./gradlew assembleRelease --no-daemon
+
+      - name: Rename APK for release
+        run: |
+          mkdir -p build-outputs
+          cp android/app/build/outputs/apk/release/*.apk build-outputs/VKU_Bookroom.apk || cp android/app/build/outputs/apk/release/*-release.apk build-outputs/VKU_Bookroom.apk
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: VKU_Bookroom_APK
+          path: build-outputs/VKU_Bookroom.apk
+          retention-days: 30
+
+      - name: Publish to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build-outputs/VKU_Bookroom.apk
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          body: |
+            ### VKU Bookroom - Release ${{ github.ref_name }}
+            
+            Ứng dụng tìm và đặt phòng học nhóm, phòng thực hành máy tính tại VKU.
+            
+            - **Tải APK trực tiếp:** [VKU_Bookroom.apk](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/VKU_Bookroom.apk)
+            - **Sinh viên thực hiện:** Nguyễn Thị Ánh Vy (23IT323)
+            - **Công nghệ:** Expo SDK 57, React Native, TypeScript, Firebase
+          draft: false
+          prerelease: false
