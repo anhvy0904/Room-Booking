@@ -8,12 +8,13 @@ import {
   TextInput,
   View
 } from 'react-native';
-import { Mail, Lock, User, ArrowRight, Eye, EyeOff, ShieldCheck } from 'lucide-react-native';
+import { Mail, Lock, User, ArrowRight, Eye, EyeOff, ShieldCheck, Sparkles } from 'lucide-react-native';
 import { BrandLogo } from '../components/BrandLogo';
 import { Screen } from '../components/Screen';
 import { signInWithGoogle } from '../api/googleAuth';
 import { signInWithEmail, signUpWithEmail } from '../api/auth';
 import { getAuthErrorMessage } from '../utils/authErrors';
+import { useBookingStore } from '../store/useBookingStore';
 
 export default function SignInScreen() {
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
@@ -74,6 +75,14 @@ export default function SignInScreen() {
       pending.current = false;
       setBusy(false);
     }
+  };
+
+  const handleGuestSignIn = () => {
+    useBookingStore.getState().setUser({
+      id: 'demo-student-vku',
+      name: 'Nguyễn Thị Ánh Vy (Demo)',
+      email: 'vy.23it323@vku.udn.vn',
+    });
   };
 
   return (
@@ -233,6 +242,21 @@ export default function SignInScreen() {
             >
               <Text style={styles.googleIcon}>G</Text>
               <Text style={styles.googleBtnText}>Tiếp tục với Google</Text>
+            </Pressable>
+
+            {/* Guest / Demo Sign In */}
+            <Pressable
+              disabled={busy}
+              onPress={handleGuestSignIn}
+              style={({ pressed }) => [
+                styles.guestBtn,
+                pressed && styles.btnPressed,
+              ]}
+              accessibilityRole="button"
+              accessibilityLabel="Trải nghiệm nhanh với tài khoản Khách"
+            >
+              <Sparkles size={16} color="#0F766E" />
+              <Text style={styles.guestBtnText}>Trải nghiệm nhanh (Khách Demo)</Text>
             </Pressable>
 
             <View style={styles.privacyRow}>
@@ -424,6 +448,23 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: '#334155',
+  },
+  guestBtn: {
+    minHeight: 46,
+    borderWidth: 1,
+    borderColor: '#99F6E4',
+    borderRadius: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: '#F0FDFA',
+    marginTop: 10,
+  },
+  guestBtnText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#0F766E',
   },
   privacyRow: {
     flexDirection: 'row',
