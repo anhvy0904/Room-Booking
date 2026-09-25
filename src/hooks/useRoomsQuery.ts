@@ -1,27 +1,12 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getRooms, getRoomById, subscribeToRooms } from '../api/rooms';
-import { useEffect } from 'react';
+import { useCallback } from 'react';
+import { subscribeToRooms, subscribeToRoom } from '../api/rooms';
+import { useRealtimeQuery } from './useRealtimeQuery';
+import { Room } from '../types/room';
 
-export const useRoomsQuery = () => {
-  const queryClient = useQueryClient();
-
-  useEffect(() => {
-    const unsubscribe = subscribeToRooms((rooms) => {
-      queryClient.setQueryData(['rooms'], rooms);
-    });
-    return () => unsubscribe();
-  }, [queryClient]);
-
-  return useQuery({
-    queryKey: ['rooms'],
-    queryFn: getRooms,
-  });
-};
+export const useRoomsQuery = () => useRealtimeQuery(['rooms'], subscribeToRooms);
 
 export const useRoomQuery = (id: string | undefined) => {
-  return useQuery({
-    queryKey: ['rooms', id],
-    queryFn: () => (id ? getRoomById(id) : Promise.resolve(undefined)),
-    enabled: !!id,
-  });
+  const subscribe = useCallback((next: (room: Room | null) => void, fail: (error: Error) => void) =>
+    id ? subscribeToRoom(id, next, fail) : () => {}, [id]);
+  return useRealtimeQuery(['rooms', id], subscribe, !!id);
 };

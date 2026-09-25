@@ -1,3 +1,5 @@
+import { shadow } from '../utils/shadow';
+
 export const colors = {
   primary: {
     light: '#CCFBFA',
@@ -65,12 +67,6 @@ export const layout = {
     full: 9999,
   },
   shadow: {
-    soft: {
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.05,
-      shadowRadius: 12,
-      elevation: 2,
-    }
+    soft: shadow(0.05, 12, 4, 2),
   }
 };

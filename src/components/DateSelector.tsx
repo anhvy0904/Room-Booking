@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { useNow } from '../hooks/useNow';
+import { Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { colors, layout, typography } from '../constants/theme';
-import { AppDate, getNextSevenDays } from '../utils/dateUtils';
+import { getNextSevenDays, toLocalDateString } from '../utils/dateUtils';
 
 interface DateSelectorProps {
   selectedDate: string;
@@ -9,7 +10,8 @@ interface DateSelectorProps {
 }
 
 export const DateSelector = ({ selectedDate, onSelectDate }: DateSelectorProps) => {
-  const dates = React.useMemo(() => getNextSevenDays(), []);
+  const today = toLocalDateString(useNow());
+  const dates = React.useMemo(() => getNextSevenDays(new Date(`${today}T00:00:00`)), [today]);
 
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.container}>

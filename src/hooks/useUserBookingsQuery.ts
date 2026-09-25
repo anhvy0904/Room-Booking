@@ -1,23 +1,12 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getBookingsForUser, subscribeToUserBookings } from '../api/bookings';
-import { useEffect } from 'react';
+import { useCallback } from 'react';
+import { subscribeToUserBookings } from '../api/bookings';
 import { useBookingStore } from '../store/useBookingStore';
+import { Booking } from '../types/booking';
+import { useRealtimeQuery } from './useRealtimeQuery';
 
 export const useUserBookingsQuery = () => {
-  const queryClient = useQueryClient();
-  const userId = useBookingStore((state) => state.user?.id);
-
-  useEffect(() => {
-    if (!userId) return;
-    const unsubscribe = subscribeToUserBookings(userId, (bookings) => {
-      queryClient.setQueryData(['bookings', userId], bookings);
-    });
-    return () => unsubscribe();
-  }, [queryClient, userId]);
-
-  return useQuery({
-    queryKey: ['bookings', userId],
-    queryFn: () => (userId ? getBookingsForUser(userId) : Promise.resolve([])),
-    enabled: !!userId,
-  });
+  const userId = useBookingStore(state => state.user?.id);
+  const subscribe = useCallback((next: (bookings: Booking[]) => void, fail: (error: Error) => void) =>
+    userId ? subscribeToUserBookings(userId, next, fail) : () => {}, [userId]);
+  return useRealtimeQuery(['bookings', userId], subscribe, !!userId);
 };

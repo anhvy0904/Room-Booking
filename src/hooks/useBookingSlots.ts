@@ -1,32 +1,27 @@
 import { useState, useCallback } from 'react';
-import { TIME_SLOTS, SlotStatus, TimeSlot as TimeSlotType } from '../constants/timeSlots';
-import { getNextSevenDays } from '../utils/dateUtils';
+import { TIME_SLOTS, SlotStatus } from '../constants/timeSlots';
+import { getNextSevenDays, isSlotPast } from '../utils/dateUtils';
+import { useNow } from './useNow';
 import { useRoomAvailability } from './useRoomAvailability';
 
 export const useBookingSlots = (roomId: string) => {
+  const now = useNow();
   const [selectedDate, setSelectedDate] = useState<string>(getNextSevenDays()[0]?.dateString || '');
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
   
-  const { isSlotBooked } = useRoomAvailability(selectedDate);
+  const { isSlotBooked, isPending, isError } = useRoomAvailability(selectedDate);
 
   const getSlotStatus = useCallback((slotId: string, slotStart: string): SlotStatus => {
-    if (selectedSlotId === slotId) return 'SELECTED';
     if (isSlotBooked(roomId, slotId)) return 'BOOKED';
-    
-    // Check if past
-    const now = new Date();
-    const isToday = selectedDate === now.toISOString().split('T')[0];
-    if (isToday) {
-      const hours = now.getHours().toString().padStart(2, '0');
-      const minutes = now.getMinutes().toString().padStart(2, '0');
-      const currentTimeStr = `${hours}:${minutes}`;
-      if (currentTimeStr >= slotStart) return 'PAST';
-    }
+    if (isSlotPast(selectedDate, slotStart, now)) return 'PAST';
+    if (selectedSlotId === slotId) return 'SELECTED';
     
     return 'AVAILABLE';
-  }, [selectedSlotId, selectedDate, roomId, isSlotBooked]);
+  }, [selectedSlotId, selectedDate, roomId, isSlotBooked, now]);
 
   return {
+    isAvailabilityPending: isPending,
+    isAvailabilityError: isError,
     selectedDate,
     setSelectedDate,
     selectedSlotId,

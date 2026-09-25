@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, StyleSheet, SafeAreaView, Platform, StatusBar } from 'react-native';
+import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from '../constants/theme';
 
 interface ScreenProps {
   children: React.ReactNode;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
 }
 
 export const Screen = ({ children, style }: ScreenProps) => {
@@ -21,7 +22,6 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: colors.neutral.offWhite,
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
   container: {
     flex: 1,

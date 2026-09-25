@@ -1,5 +1,7 @@
 export type Building = 'A' | 'B' | 'C' | 'V';
 
+export type RoomType = 'study' | 'lab';
+
 export enum Equipment {
   PROJECTOR = 'projector',
   WHITEBOARD = 'whiteboard',
@@ -10,9 +12,13 @@ export enum Equipment {
 export interface Room {
   id: string;
   name: string;
+  type?: RoomType;
   building: Building;
   floor: number;
   capacity: number;
   equipment: Equipment[];
+  description?: string;
   image?: string;
+  images?: string[];
 }
+

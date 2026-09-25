@@ -1,10 +1,8 @@
-import { BookingStatus } from '../store/useBookingStore';
 import { Booking } from '../types/booking';
-import { TIME_SLOTS } from '../constants/timeSlots';
+import { toLocalDateString } from './dateUtils';
 
-export const isRoomOccupiedNow = (roomId: string, activeBookings: Booking[]): boolean => {
-  const now = new Date();
-  const currentDateStr = now.toISOString().split('T')[0];
+export const isRoomOccupiedNow = (roomId: string, activeBookings: Booking[], now: Date = new Date()): boolean => {
+  const currentDateStr = toLocalDateString(now);
   
   // Format current time as HH:mm
   const hours = now.getHours().toString().padStart(2, '0');
@@ -12,7 +10,8 @@ export const isRoomOccupiedNow = (roomId: string, activeBookings: Booking[]): bo
   const currentTimeStr = `${hours}:${minutes}`;
 
   return activeBookings.some(booking => {
-    if (booking.roomId !== roomId || booking.status !== 'active') return false;
+    const isOccupying = booking.status === 'active' || booking.status === 'checked_in';
+    if (booking.roomId !== roomId || !isOccupying) return false;
     if (booking.date !== currentDateStr) return false;
     
     // Check if current time is within booking time
@@ -31,6 +30,6 @@ export const hasBookingConflict = (
       b.roomId === roomId &&
       b.date === date &&
       b.slotId === slotId &&
-      b.status === 'active'
+      (b.status === 'active' || b.status === 'checked_in')
   );
 };

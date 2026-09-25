@@ -1,3 +1,5 @@
+export type BookingStatus = 'active' | 'cancelled' | 'checked_in' | 'completed';
+
 export interface Booking {
   id: string;
   userId: string;
@@ -7,6 +9,9 @@ export interface Booking {
   startTime: string;
   endTime: string;
   createdAt: string;
-  status: 'active' | 'cancelled';
+  status: BookingStatus;
+  checkedInAt?: string;
+  completedAt?: string;
   notificationId?: string;
 }
+

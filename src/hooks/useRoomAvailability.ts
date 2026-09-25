@@ -1,19 +1,21 @@
 import { useCallback } from 'react';
 import { useDateBookingsQuery } from './useDateBookingsQuery';
-import { hasBookingConflict } from '../utils/bookingConflict';
+import { hasBookingConflict, isRoomOccupiedNow as checkOccupied } from '../utils/bookingConflict';
 
 export const useRoomAvailability = (date: string) => {
-  const { data: bookingsToday = [] } = useDateBookingsQuery(date);
+  const { data: bookingsToday = [], isPending, isError } = useDateBookingsQuery(date);
 
   const isSlotBooked = useCallback((roomId: string, slotId: string) => {
     return hasBookingConflict(roomId, date, slotId, bookingsToday);
   }, [bookingsToday, date]);
 
   const isRoomOccupiedNow = useCallback((roomId: string) => {
-    return false; // Simplified, normally use bookingConflict.ts
+    return checkOccupied(roomId, bookingsToday);
   }, [bookingsToday]);
 
   return {
+    isPending,
+    isError,
     isSlotBooked,
     isRoomOccupiedNow,
   };

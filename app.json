@@ -5,27 +5,37 @@
     "version": "1.0.0",
     "scheme": "vku-bookroom",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/bookroom-logo.png",
     "userInterfaceStyle": "light",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.vku.bookroom",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "package": "com.vku.bookroom",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
+        "backgroundColor": "#E8F5F1",
+        "foregroundImage": "./assets/bookroom-logo.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/bookroom-logo.png"
     },
     "plugins": [
       "expo-router",
-      "expo-status-bar"
-    ]
+      "expo-notifications",
+      "expo-status-bar",
+      "@react-native-google-signin/google-signin"
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "d832f636-6da3-4014-93b4-6a7c22c3dea5"
+      }
+    },
+    "owner": "anhvy0904"
   }
 }

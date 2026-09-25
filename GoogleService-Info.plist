@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>736332302026-nnr55q7u9qc1bq1s6g0unq7e5j0sac7n.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.736332302026-nnr55q7u9qc1bq1s6g0unq7e5j0sac7n</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCruDP_2UO9TIkI5aTrHaq9mLbLM9SW3UM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>736332302026</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.vku.bookroom</string>
+	<key>PROJECT_ID</key>
+	<string>vku-booking-room</string>
+	<key>STORAGE_BUCKET</key>
+	<string>vku-booking-room.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:736332302026:ios:efd02a7367f2207f319633</string>
+	<key>DATABASE_URL</key>
+	<string>https://vku-booking-room-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>

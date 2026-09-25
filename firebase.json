@@ -1,4 +1,13 @@
 {
+  "auth": {
+    "authorizedDomains": ["localhost", "vku-booking-room.firebaseapp.com", "vku-booking-room.web.app"],
+    "providers": {
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "VKU Bookroom",
+        "supportEmail": "anhvydn2005@gmail.com"
+      }
+    }
+  },
   "emulators": {
     "dataconnect": {
       "dataDir": "dataconnect/.dataconnect/pgliteData"

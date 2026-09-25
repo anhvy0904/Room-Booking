@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "736332302026",
+    "firebase_url": "https://vku-booking-room-default-rtdb.firebaseio.com",
+    "project_id": "vku-booking-room",
+    "storage_bucket": "vku-booking-room.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:736332302026:android:1e718390860e3f6a319633",
+        "android_client_info": {
+          "package_name": "com.vku.bookroom"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "736332302026-o97ghic3da00c2qmel4durq2lheg76bp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiYr3zeNN_8wKWjmYfKbEmoirfUXzVyhk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "736332302026-o97ghic3da00c2qmel4durq2lheg76bp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "736332302026-nnr55q7u9qc1bq1s6g0unq7e5j0sac7n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.vku.bookroom"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

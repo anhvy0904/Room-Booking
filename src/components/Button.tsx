@@ -24,7 +24,7 @@ const BaseButton = ({ label, onPress, disabled, loading, style, variantStyles, t
     activeOpacity={0.8}
   >
     {loading ? (
-      <ActivityIndicator color={textStyles.color} />
+      <ActivityIndicator color={StyleSheet.flatten(textStyles)?.color} />
     ) : (
       <Text style={[styles.text, textStyles]}>{label}</Text>
     )}
@@ -35,7 +35,7 @@ export const PrimaryButton = (props: ButtonProps) => (
   <BaseButton
     {...props}
     variantStyles={styles.primary}
-    textStyles={styles.primaryText}
+    textStyles={[styles.primaryText, props.textStyles]}
   />
 );
 
@@ -43,7 +43,7 @@ export const SecondaryButton = (props: ButtonProps) => (
   <BaseButton
     {...props}
     variantStyles={styles.secondary}
-    textStyles={styles.secondaryText}
+    textStyles={[styles.secondaryText, props.textStyles]}
   />
 );
 
@@ -51,7 +51,7 @@ export const DestructiveButton = (props: ButtonProps) => (
   <BaseButton
     {...props}
     variantStyles={styles.destructive}
-    textStyles={styles.destructiveText}
+    textStyles={[styles.destructiveText, props.textStyles]}
   />
 );
 
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   },
   disabled: {
     backgroundColor: colors.neutral.disabled,
-    shadowOpacity: 0,
+    boxShadow: 'none',
     elevation: 0,
   },
   primary: {

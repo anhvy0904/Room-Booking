@@ -1,3 +1,4 @@
+import { shadow } from '../utils/shadow';
 import React from 'react';
 import { Pressable, Text, StyleSheet } from 'react-native';
 import { colors, layout, typography } from '../constants/theme';
@@ -73,11 +74,7 @@ const styles = StyleSheet.create({
   selected: {
     backgroundColor: colors.primary.main,
     borderColor: colors.primary.main,
-    shadowColor: colors.primary.main,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 4,
+    ...shadow(0.2, 8, 2, 4),
   },
   disabled: {
     backgroundColor: colors.neutral.border,
