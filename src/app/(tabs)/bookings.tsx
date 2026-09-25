@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Text, Alert } from 'react-native';
-import { useBookingStore, Booking } from '../../store/useBookingStore';
+import { View, StyleSheet, FlatList, Text, Alert, ActivityIndicator } from 'react-native';
 import { BookingCard } from '../../components/BookingCard';
 import { QRCodeModal } from '../../components/QRCodeModal';
 import { Screen } from '../../components/Screen';
 import { layout, typography, colors } from '../../constants/theme';
 import { useRoomQuery } from '../../hooks/useRoomsQuery';
+import { useUserBookingsQuery } from '../../hooks/useUserBookingsQuery';
+import { cancelBooking } from '../../api/bookings';
+import { Booking } from '../../types/booking';
 
 export default function BookingsScreen() {
-  const { bookings, cancelBooking } = useBookingStore();
+  const { data: bookings = [], isLoading } = useUserBookingsQuery();
   const [qrModalVisible, setQrModalVisible] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<{booking: Booking, roomName: string} | null>(null);
 
@@ -19,7 +21,7 @@ export default function BookingsScreen() {
     return timeB - timeA; // Newest first
   });
 
-  const handleCancel = (bookingId: string) => {
+  const handleCancel = (booking: Booking) => {
     Alert.alert(
       'Cancel Booking',
       'Are you sure you want to cancel this booking? This action cannot be undone.',
@@ -28,7 +30,13 @@ export default function BookingsScreen() {
         { 
           text: 'Yes, Cancel', 
           style: 'destructive',
-          onPress: () => cancelBooking(bookingId)
+          onPress: async () => {
+            try {
+              await cancelBooking(booking);
+            } catch (error) {
+              Alert.alert('Error', 'Failed to cancel booking.');
+            }
+          }
         }
       ]
     );
@@ -46,7 +54,11 @@ export default function BookingsScreen() {
         <Text style={styles.headerSubtitle}>View and manage your room reservations</Text>
       </View>
 
-      {sortedBookings.length === 0 ? (
+      {isLoading ? (
+        <View style={styles.emptyState}>
+          <ActivityIndicator size="large" color={colors.primary.main} />
+        </View>
+      ) : sortedBookings.length === 0 ? (
         <View style={styles.emptyState}>
           <Text style={styles.emptyTitle}>No bookings yet</Text>
           <Text style={styles.emptySubtitle}>Your upcoming and past reservations will appear here.</Text>

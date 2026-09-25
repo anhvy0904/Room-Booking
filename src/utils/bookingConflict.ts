@@ -1,4 +1,5 @@
-import { Booking, BookingStatus } from '../store/useBookingStore';
+import { BookingStatus } from '../store/useBookingStore';
+import { Booking } from '../types/booking';
 import { TIME_SLOTS } from '../constants/timeSlots';
 
 export const isRoomOccupiedNow = (roomId: string, activeBookings: Booking[]): boolean => {

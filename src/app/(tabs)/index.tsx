@@ -10,19 +10,23 @@ import { Room, Equipment } from '../../types/room';
 import { isRoomOccupiedNow } from '../../utils/bookingConflict';
 import { Filter, Users } from 'lucide-react-native';
 import { useRoomsQuery } from '../../hooks/useRoomsQuery';
+import { useDateBookingsQuery } from '../../hooks/useDateBookingsQuery';
 import { useRoomFilters } from '../../hooks/useRoomFilters';
 import { Screen } from '../../components/Screen';
 import { colors, layout, typography } from '../../constants/theme';
 
 export default function HomeScreen() {
-  const { bookings, filters, searchQuery, setSearchQuery, setBuildingFilter, setCapacityFilter, toggleEquipmentFilter, clearFilters } = useBookingStore();
-  const { data: rooms, isLoading, isError } = useRoomsQuery();
+  const { filters, searchQuery, setSearchQuery, setBuildingFilter, setCapacityFilter, toggleEquipmentFilter, clearFilters } = useBookingStore();
+  const { data: rooms, isLoading: isRoomsLoading, isError } = useRoomsQuery();
   const { filteredRooms, hasActiveFilters } = useRoomFilters(rooms);
+  
+  const currentDateStr = new Date().toISOString().split('T')[0] as string;
+  const { data: bookingsToday = [] } = useDateBookingsQuery(currentDateStr);
 
   const renderItem = useCallback(({ item }: { item: Room }) => {
-    const isOccupied = isRoomOccupiedNow(item.id, bookings);
+    const isOccupied = isRoomOccupiedNow(item.id, bookingsToday);
     return <RoomCard room={item} isOccupied={isOccupied} />;
-  }, [bookings]);
+  }, [bookingsToday]);
 
   const keyExtractor = useCallback((item: Room) => item.id, []);
 
@@ -89,7 +93,7 @@ export default function HomeScreen() {
           </ScrollView>
         </View>
 
-        {isLoading ? (
+        {isRoomsLoading ? (
           <View style={styles.centerState}>
             <ActivityIndicator size="large" color={colors.primary.main} />
           </View>

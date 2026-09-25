@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Booking } from '../store/useBookingStore';
+import { Booking } from '../types/booking';
 import { useRoomQuery } from '../hooks/useRoomsQuery';
 import { colors, layout, typography } from '../constants/theme';
 import { PrimaryButton, DestructiveButton } from './Button';
@@ -10,7 +10,7 @@ import { QrCode, Calendar, Clock, MapPin } from 'lucide-react-native';
 interface BookingCardProps {
   booking: Booking;
   onShowQR: (booking: Booking, roomName: string) => void;
-  onCancel: (bookingId: string) => void;
+  onCancel: (booking: Booking) => void;
 }
 
 export const BookingCard = ({ booking, onShowQR, onCancel }: BookingCardProps) => {
@@ -69,7 +69,7 @@ export const BookingCard = ({ booking, onShowQR, onCancel }: BookingCardProps) =
         <View style={styles.footer}>
           <DestructiveButton 
             label="Cancel Booking" 
-            onPress={() => onCancel(booking.id)} 
+            onPress={() => onCancel(booking)} 
             style={styles.cancelBtn}
           />
         </View>

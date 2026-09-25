@@ -7,11 +7,11 @@ export const useBookingSlots = (roomId: string) => {
   const [selectedDate, setSelectedDate] = useState<string>(getNextSevenDays()[0]?.dateString || '');
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
   
-  const { isSlotBooked } = useRoomAvailability();
+  const { isSlotBooked } = useRoomAvailability(selectedDate);
 
   const getSlotStatus = useCallback((slotId: string, slotStart: string): SlotStatus => {
     if (selectedSlotId === slotId) return 'SELECTED';
-    if (isSlotBooked(roomId, selectedDate, slotId)) return 'BOOKED';
+    if (isSlotBooked(roomId, slotId)) return 'BOOKED';
     
     // Check if past
     const now = new Date();

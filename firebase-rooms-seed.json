@@ -1,0 +1,39 @@
+{
+  "rooms": {
+    "V401": {
+      "name": "V401",
+      "building": "V",
+      "floor": 4,
+      "capacity": 50,
+      "equipment": ["projector", "whiteboard", "ac"]
+    },
+    "V402": {
+      "name": "V402",
+      "building": "V",
+      "floor": 4,
+      "capacity": 30,
+      "equipment": ["whiteboard", "ac"]
+    },
+    "A201": {
+      "name": "A201",
+      "building": "A",
+      "floor": 2,
+      "capacity": 100,
+      "equipment": ["projector", "ac"]
+    },
+    "B101": {
+      "name": "B101",
+      "building": "B",
+      "floor": 1,
+      "capacity": 40,
+      "equipment": ["high_spec_pc", "whiteboard", "ac"]
+    },
+    "C305": {
+      "name": "C305",
+      "building": "C",
+      "floor": 3,
+      "capacity": 20,
+      "equipment": ["whiteboard"]
+    }
+  }
+}

@@ -1,23 +1,12 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { MOCK_ROOMS } from '../data/rooms';
+
 import { Room, Equipment } from '../types/room';
 
-export type BookingStatus = 'active' | 'cancelled';
+import { Booking } from '../types/booking';
 
-export interface Booking {
-  id: string;
-  userId: string;
-  roomId: string;
-  date: string; // YYYY-MM-DD
-  slotId: string;
-  startTime: string; // HH:mm
-  endTime: string; // HH:mm
-  createdAt: string; // ISO string
-  status: BookingStatus;
-  notificationId?: string;
-}
+export type BookingStatus = 'active' | 'cancelled';
 
 interface FilterState {
   building: string | null;
@@ -27,8 +16,6 @@ interface FilterState {
 
 interface BookingState {
   user: { id: string; name: string } | null;
-  rooms: Room[];
-  bookings: Booking[];
   filters: FilterState;
   searchQuery: string;
   
@@ -39,8 +26,6 @@ interface BookingState {
   setCapacityFilter: (capacity: number | null) => void;
   toggleEquipmentFilter: (equipment: Equipment) => void;
   clearFilters: () => void;
-  addBooking: (booking: Booking) => void;
-  cancelBooking: (bookingId: string) => void;
 }
 
 const initialFilters: FilterState = {
@@ -53,8 +38,6 @@ export const useBookingStore = create<BookingState>()(
   persist(
     (set, get) => ({
       user: { id: "student_001", name: "Current Student" }, // Mock user
-      rooms: MOCK_ROOMS, // We keep it here so it can be filtered
-      bookings: [],
       filters: initialFilters,
       searchQuery: '',
 
@@ -73,20 +56,11 @@ export const useBookingStore = create<BookingState>()(
           return { filters: { ...state.filters, equipment: updatedEq } };
         }),
       clearFilters: () => set({ filters: initialFilters, searchQuery: '' }),
-      
-      addBooking: (booking) => 
-        set((state) => ({ bookings: [...state.bookings, booking] })),
-      cancelBooking: (bookingId) =>
-        set((state) => ({
-          bookings: state.bookings.map((b) => 
-            b.id === bookingId ? { ...b, status: 'cancelled' } : b
-          )
-        })),
     }),
     {
       name: 'booking-storage',
       storage: createJSONStorage(() => AsyncStorage),
-      partialize: (state) => ({ bookings: state.bookings, user: state.user }), // Only persist bookings and user
+      partialize: (state) => ({ user: state.user }), // Only persist user
     }
   )
 );
