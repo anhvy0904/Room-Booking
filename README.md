@@ -12,11 +12,15 @@ Android / iOS / Web · Giao diện tiếng Việt · Giờ Việt Nam UTC+7</p>
 
 ---
 
+<p align="center">
+  <img src="docs/screenshots/01-desktop.png" width="92%" alt="Giao diện Web Desktop VKU Bookroom">
+</p>
+
 VKU Bookroom giúp sinh viên Đại học Công nghệ Thông tin & Truyền thông Việt - Hàn (VKU) dễ dàng tra cứu không gian học tập phù hợp, kiểm tra tình trạng phòng theo thời gian thực, xem khung giờ trống, đặt phòng và quản lý buổi học tiện lợi. Dự án sử dụng chung một mã nguồn (Universal App) tối ưu mượt mà cho cả điện thoại di động và giao diện màn hình lớn trên Web Desktop.
 
 **Dữ liệu ứng dụng:** 20 phòng học & phòng máy chuyên biệt trải rộng trên 4 tòa nhà A, B, C, V; mỗi phòng đều có bộ ảnh thực tế chất lượng cao, thông tin sức chứa, tầng, tòa và tiện nghi chi tiết.
 
-**Mục lục:** [1. Sản phẩm & Tính năng](#1-san-pham-va-tinh-nang) · [2. Giao diện đa nền tảng](#2-giao-dien-da-nen-tang) · [3. Luồng nghiệp vụ](#3-luong-nghiep-vu) · [4. Công nghệ & Kiến trúc](#4-cong-nghe-va-kien-truc) · [5. Mô hình dữ liệu](#5-mo-hinh-du-lieu) · [6. Cài đặt & Chạy cục bộ](#6-cai-dat-va-chay-cuc-bo) · [7. Cấu hình Firebase](#7-cau-hinh-firebase) · [8. Build APK & Phân phối](#8-build-va-phan-phoi) · [9. Kiểm thử](#9-kiem-thu-va-chat-luong) · [10. Kịch bản Demo](#10-kich-ban-demo) · [11. Cấu trúc thư mục](#11-cau-truc-thu-muc) · [12. Hướng phát triển](#12-gioi-han-va-huong-phat-trien)
+**Mục lục:** [1. Sản phẩm & Tính năng](#1-san-pham-va-tinh-nang) · [2. Ảnh màn hình sản phẩm](#2-anh-man-hinh-san-pham) · [3. Luồng nghiệp vụ](#3-luong-nghiep-vu) · [4. Công nghệ & Kiến trúc](#4-cong-nghe-va-kien-truc) · [5. Mô hình dữ liệu](#5-mo-hinh-du-lieu) · [6. Cài đặt & Chạy cục bộ](#6-cai-dat-va-chay-cuc-bo) · [7. Cấu hình Firebase](#7-cau-hinh-firebase) · [8. Build APK & Phân phối](#8-build-va-phan-phoi) · [9. Kiểm thử](#9-kiem-thu-va-chat-luong) · [10. Kịch bản Demo](#10-kich-ban-demo) · [11. Cấu trúc thư mục](#11-cau-truc-thu-muc) · [12. Hướng phát triển](#12-gioi-han-va-huong-phat-trien)
 
 ---
 
@@ -49,19 +53,60 @@ Sinh viên VKU thường xuyên cần không gian để thảo luận bài tập
 
 ---
 
-<a id="2-giao-dien-da-nen-tang"></a>
+<a id="2-anh-man-hinh-san-pham"></a>
 
-## 2. Giao diện đa nền tảng
+## 2. Ảnh màn hình sản phẩm
 
-Ứng dụng được thiết kế theo tiêu chuẩn thiết kế hiện đại, responsive thích ứng theo kích thước màn hình:
+Dưới đây là hình ảnh thực tế ghi lại các bước trải nghiệm chính trên cả hai nền tảng Web Desktop và Mobile của **VKU Bookroom**:
 
-- **Mobile (< 768px):** 
-  - Điều hướng bằng Bottom Tabs 4 mục: *Khám phá*, *Yêu thích*, *Lịch của tôi*, *Tài khoản*.
-  - Bố cục thẻ 1 cột tối ưu cho thao tác vuốt chạm, xem gallery toàn màn hình mượt mà.
-- **Desktop / Tablet (>= 768px):** 
-  - Sidebar cố định bên trái hiển thị Logo, Slogan `"Hãy đặt lịch để có người iu"`, menu điều hướng và huy hiệu số lượng yêu thích.
-  - Danh sách phòng hiển thị dạng lưới 2-3 cột trực quan.
-  - Màn hình chi tiết chia 2 cột: Cột trái xem ảnh carousel + tiện nghi; Cột phải chọn ngày học, ca học và xác nhận đặt phòng.
+### 🖥️ 1. Giao diện Desktop
+Bố cục hiển thị tối ưu trên màn hình lớn với thanh **Desktop Sidebar** bên trái (Logo, Slogan *"Hãy đặt lịch để có người iu"*, menu điều hướng), thanh tìm kiếm không dấu, bộ lọc đa tiêu chí và danh sách phòng 2 cột trực quan.
+
+<p align="center">
+  <img src="docs/screenshots/01-desktop.png" width="95%" alt="1. Giao diện Desktop VKU Bookroom">
+</p>
+
+---
+
+### 📱 2. Giao diện Mobile & Luồng Đặt Phòng Thực Tế
+
+<table>
+  <tr>
+    <th width="25%">2. Giao diện Mobile</th>
+    <th width="25%">3. Chọn phòng</th>
+    <th width="25%">4. Đặt phòng</th>
+    <th width="25%">5. Đặt phòng thành công</th>
+  </tr>
+  <tr>
+    <td align="center" valign="top">
+      <img src="docs/screenshots/02-mobile.png" width="100%" alt="2. Giao diện Mobile">
+      <br><strong>Giao diện Mobile</strong>
+      <br><em>Thẻ phòng 1 cột & Bottom Tabs</em>
+    </td>
+    <td align="center" valign="top">
+      <img src="docs/screenshots/03-room-detail.png" width="100%" alt="3. Chọn phòng">
+      <br><strong>Chọn phòng & Chi tiết</strong>
+      <br><em>Ảnh Carousel, Fullscreen & Tiện nghi</em>
+    </td>
+    <td align="center" valign="top">
+      <img src="docs/screenshots/04-booking.png" width="100%" alt="4. Đặt phòng">
+      <br><strong>Đặt phòng & Ca học</strong>
+      <br><em>Chọn ngày 7 ngày tới & Xem trước</em>
+    </td>
+    <td align="center" valign="top">
+      <img src="docs/screenshots/05-booking-success.png" width="100%" alt="5. Đặt phòng thành công">
+      <br><strong>Đặt phòng thành công</strong>
+      <br><em>Lịch của tôi, Vé QR & Check-in</em>
+    </td>
+  </tr>
+</table>
+
+### 📝 Chi tiết các màn hình:
+1. **Ảnh 1 — Giao diện Desktop:** Màn hình lớn với thanh Sidebar bên trái hiển thị thương hiệu, bộ lọc nâng cao theo tòa/chỗ ngồi/thiết bị, và danh sách 20 phòng dạng lưới 2 cột.
+2. **Ảnh 2 — Giao diện Mobile:** Giao diện tối ưu cho điện thoại với thanh tìm kiếm thông minh, các thẻ phòng bo tròn thanh lịch và thanh điều hướng Bottom Navigation Bar 4 tabs.
+3. **Ảnh 3 — Chọn phòng (Chi tiết):** Hiển thị bộ ảnh chất lượng cao của từng phòng với carousel lướt ảnh, thumbnail, nút xem toàn màn hình (fullscreen gallery), badge loại phòng, sức chứa, tầng, tòa, mô tả chi tiết và tiện nghi trang bị.
+4. **Ảnh 4 — Đặt phòng (Chọn ngày & ca học):** Chọn ngày trong vòng 7 ngày tới, hệ thống hiển thị trạng thái khung giờ theo thời gian thực (Trống, Đang chọn, Đã đặt, Đã qua), hiển thị hộp tóm tắt thông tin đặt phòng và nút xác nhận.
+5. **Ảnh 5 — Đặt phòng thành công (Lịch của tôi):** Quản lý lịch học sắp tới, hiển thị nút xem vé QR, thông tin đếm ngược giờ check-in phòng học và tùy chọn hủy lịch linh hoạt trước giờ bắt đầu.
 
 ---
 
