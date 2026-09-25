@@ -10,6 +10,12 @@
 <p align="center">React Native · Expo SDK 57 · TypeScript · Firebase Realtime Database & Auth<br>
 Android / iOS / Web · Giao diện tiếng Việt · Giờ Việt Nam UTC+7</p>
 
+<p align="center">
+  <a href="https://youtube.com/shorts/XyUuxwCj4HY">📹 <strong>Xem Video Demo (YouTube Shorts)</strong></a> · 
+  <a href="https://github.com/anhvy0904/Room-Booking/releases/download/v1.0.0/VKU_Bookroom.apk">📦 <strong>Tải APK Release (v1.0.0)</strong></a> · 
+  <a href="23IT323_Miniproject2.md">📄 <strong>Báo cáo Kỹ thuật (23IT323)</strong></a>
+</p>
+
 ---
 
 <p align="center">

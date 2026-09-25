@@ -17,7 +17,7 @@
 
 Tài nguyên dự án được công khai và kiểm thử thực tế:
 
-- **📹 Video Demo URL:** [Chèn link Video Demo tại đây]
+- **📹 Video Demo URL:** [https://youtube.com/shorts/XyUuxwCj4HY](https://youtube.com/shorts/XyUuxwCj4HY)
 - **📦 Download APK Release (Trực tiếp từ GitHub Release):** [https://github.com/anhvy0904/Room-Booking/releases/download/v1.0.0/VKU_Bookroom.apk](https://github.com/anhvy0904/Room-Booking/releases/download/v1.0.0/VKU_Bookroom.apk)
 - **☁️ Link Cloud Build APK (Expo EAS Build):** [https://expo.dev/accounts/anhvy0904/projects/VKU_bookroom/builds/51804847-bb5f-4b2a-ba62-74397423d9dd](https://expo.dev/accounts/anhvy0904/projects/VKU_bookroom/builds/51804847-bb5f-4b2a-ba62-74397423d9dd)
 - **🏷️ Trang phát hành GitHub Release (v1.0.0):** [https://github.com/anhvy0904/Room-Booking/releases/tag/v1.0.0](https://github.com/anhvy0904/Room-Booking/releases/tag/v1.0.0)
