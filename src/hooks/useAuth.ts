@@ -12,7 +12,12 @@ export const useAuth = () => {
 
   useEffect(() => {
     let previousUid: string | null = null;
-    return onAuthStateChanged(auth, firebaseUser => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+
+    const unsubscribe = onAuthStateChanged(auth, firebaseUser => {
+      clearTimeout(timer);
       const user = firebaseUser && !firebaseUser.isAnonymous ? firebaseUser : null;
       if (previousUid !== user?.uid) queryClient.clear();
       previousUid = user?.uid ?? null;
@@ -24,10 +29,16 @@ export const useAuth = () => {
       setError(false);
       setLoading(false);
     }, () => {
+      clearTimeout(timer);
       setStoreUser(null);
       setError(true);
       setLoading(false);
     });
+
+    return () => {
+      clearTimeout(timer);
+      unsubscribe();
+    };
   }, [setStoreUser]);
 
   return { loading, error };
